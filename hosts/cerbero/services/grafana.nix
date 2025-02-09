@@ -7,9 +7,9 @@
   };
 
   services.nginx.virtualHosts.${config.services.grafana.domain} = {
+    default = true;
     locations."/" = {
-      proxPass = "https://127.0.0.1:${toString config.services.grafana.port}";
-      porxyWebsockets = true;
+      proxyPass = "https://127.0.0.1:${toString config.services.grafana.port}";
     };
   };
 }

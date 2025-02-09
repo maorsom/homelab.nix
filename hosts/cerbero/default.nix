@@ -1,16 +1,21 @@
 {
+  modulesPath,
   inputs,
   outputs,
   lib,
   config,
   pkgs,
   ...
-}: {
+}:
+{
 
   imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+    (modulesPath + "/profiles/qemu-guest.nix")
+    ./disk-config.nix
+
     ../common/nginx.nix
     ./services
-    ./hardware-configuration.nix
   ];
 
   nixpkgs = {
@@ -26,35 +31,43 @@
     };
   };
 
-  nix = let
-    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-  in {
-    settings = {
-      experimental-features = "nix-command flakes";
-      # Opinionated: disable global registry
-      flake-registry = "";
-      # Workaround for https://github.com/NixOS/nix/issues/9574
-      nix-path = config.nix.nixPath;
-    };
-    channel.enable = false;
+  nix =
+    let
+      flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+    in
+    {
+      settings = {
+        experimental-features = "nix-command flakes";
+        # Opinionated: disable global registry
+        flake-registry = "";
+        # Workaround for https://github.com/NixOS/nix/issues/9574
+        nix-path = config.nix.nixPath;
+      };
+      channel.enable = false;
 
-    # Opinionated: make flake registry and nix path match flake inputs
-    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
-    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+      # Opinionated: make flake registry and nix path match flake inputs
+      registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
+      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+    };
+
+  boot.loader.grub = {
+    efiSupport = true;
+    efiInstallAsRemovable = true;
   };
 
-
   networking.hostName = "cerebro";
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedTCPPorts = [
+    22
+    2342
+  ];
 
   users.users = {
     marosom = {
-      initialPassword = "Oran1Ofir2!";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
-
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILyvt3eutNJYckqboCsGejfpMvjJSVLjBvx7S71LBhBe"
       ];
-      extraGroups = ["wheel"];
+      extraGroups = [ "wheel" ];
     };
   };
 
@@ -65,10 +78,10 @@
       PermitRootLogin = "no";
       # Opinionated: use keys only.
       # Remove if you want to SSH using passwords
-      PasswordAuthentication = true;
+      PasswordAuthentication = false;
     };
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  system.stateVersion = "23.05";
+  system.stateVersion = "24.11";
 }

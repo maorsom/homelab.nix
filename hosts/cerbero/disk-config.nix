@@ -39,7 +39,7 @@
             size = "100%";
             content = {
               type = "zfs";
-              pool = "zpool";
+              pool = "zroot";
             };
           };
         };
@@ -57,7 +57,7 @@
             size = "100%";
             content = {
               type = "zfs";
-              pool = "zpool";
+              pool = "zroot";
             };
           };
         };
@@ -65,49 +65,29 @@
     };
 
     # 🔥 ZFS Pool Configuration (RAID-1 Mirror)
-    zpool.zpool = {
+    zpool.zroot = {
       type = "zpool";
 
       mode = "mirror"; # RAID-1 for redundancy
-      options = {
-        ashift = "12"; # Optimized for 4K sector drives
-        autotrim = "on"; # Automatic SSD/HDD trim
-        compression = "lz4"; # Lightweight compression
-        atime = "off"; # Disable access time updates for performance
-      };
+      options.cachefile = "none";
       rootFsOptions = {
         compression = "lz4";
-        xattr = "sa";
-        acltype = "posixacl"; # ACL support
-        relatime = "on"; # Reduce metadata writes
+        "com.sun:auto-snapshot" = "true";
       };
       mountpoint = "/";
       postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^zroot@blank$' || zfs snapshot zroot@blank";
       datasets = {
-        "services" = {
+        services = {
           type = "zfs_fs";
-          mountpoint = "/mnt/services"; # Store application data
-          options = {
-            compression = "lz4";
-          };
+          mountpoint = "/services"; # Store application data
         };
-        "databases" = {
+        databases = {
           type = "zfs_fs";
-          mountpoint = "/mnt/databases"; # Store PostgreSQL, MongoDB
-          options = {
-            compression = "zstd";
-            dedup = "off";
-            recordsize = "16K";
-            "com.sun:auto-snapshot" = "true";
-          };
+          mountpoint = "/databases"; # Store PostgreSQL, MongoDB
         };
-        "logs" = {
+        logs = {
           type = "zfs_fs";
-          mountpoint = "/mnt/logs"; # Store logs for Loki, Prometheus
-          options = {
-            compression = "lz4";
-            recordsize = "16k";
-          };
+          mountpoint = "/logs"; # Store logs for Loki, Prometheus
         };
       };
     };

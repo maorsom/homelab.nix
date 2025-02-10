@@ -56,7 +56,6 @@
     enable = true;
     devices = ["/dev/sda"];
     efiSupport = true;
-    efiInstallAsRemovable = true;
   };
 
   networking.hostId = "f5c9addc";

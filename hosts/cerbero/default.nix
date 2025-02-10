@@ -11,11 +11,11 @@
 
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-config.nix
 
     ../common/nginx.nix
     ./services
+    ./hardware-configuration.nix
   ];
 
   nixpkgs = {
@@ -51,6 +51,7 @@
     };
 
   boot.loader.grub = {
+    enable = true;
     efiSupport = true;
     efiInstallAsRemovable = true;
   };

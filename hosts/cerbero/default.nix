@@ -52,10 +52,12 @@
 
   boot.loader.grub = {
     enable = true;
+    devices = ["/dev/sda"];
     efiSupport = true;
     efiInstallAsRemovable = true;
   };
 
+  networking.hostId = "f5c9addc";
   networking.hostName = "cerebro";
   networking.firewall.allowedTCPPorts = [
     22

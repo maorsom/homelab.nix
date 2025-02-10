@@ -74,8 +74,6 @@
         compression = "lz4";
         "com.sun:auto-snapshot" = "true";
       };
-      mountpoint = "/";
-      postCreateHook = "zfs list -t snapshot -H -o name | grep -E '^zroot@blank$' || zfs snapshot zroot@blank";
       datasets = {
         services = {
           type = "zfs_fs";

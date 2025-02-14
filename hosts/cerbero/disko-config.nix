@@ -8,8 +8,11 @@
       content = {
         type = "gpt";
         partitions = {
-          boot = {
-            size = "512M";
+          ESP = {
+	    priority = 1;
+	    name = "ESP";
+	    start = "1M";
+            end = "512M";
             type = "EF00"; # EFI Partition for UEFI booting
             content = {
               type = "filesystem";
@@ -22,13 +25,20 @@
             content = {
               type = "btrfs";
               extraArgs = [ "-f" ];
-              mountpoint = "/";
-              mountOptions = ["compress=zstd" "noatime"];
               subvolumes = {
-                "@nix" = {
+		"/rootfs" = {
+			mountpoint = "/";
+		};
+                "/nix" = {
                   mountpoint = "/nix";
                   mountOptions = ["noatime" "compress=zstd"];
                 };
+		"/swap" = {
+			mountpoint = "/.swapvol";
+			swap = {
+				swapfile.size = "8G";
+			};
+		};
               };
             };
           };
@@ -37,51 +47,46 @@
     };
 
     # 🔵 RAID 0 (Striping) or RAID 1 (Mirroring) for HDDs
-    disk.hdd1 = {
+    disk.hdd = {
       device = "/dev/sdb";  # First HDD
       type = "disk";
       content = {
-
         type = "gpt";
         partitions = {
           primary = {
             size = "100%";
             content = {
-
               type = "btrfs";
-              raid = "0";  # 🚀 Use "1" for RAID 1 (mirroring)
-
-              devices = [ "/dev/sdb" "/dev/sdc" ];  # Two disks in RAID
-              mountpoint = "/mnt/storage";  # Main mountpoint for the RAID
-
+	      extraArgs = [
+		"-d raid0"
+		"/dev/sdc"
+		"-f"
+	      ];
               subvolumes = {
                 "@data" = {
-                  mountpoint = "/mnt/storage/data";
+                  mountpoint = "/data";
                   mountOptions = ["noatime" "compress=zstd"];
-
                 };
                 "@databases" = {
-                  mountpoint = "/mnt/storage/databases";
+                  mountpoint = "/databases";
                   mountOptions = ["noatime" "compress=lzo" "nodatacow"];
                 };
                 "@backups" = {
-                  mountpoint = "/mnt/storage/backups";
+                  mountpoint = "/backups";
                   mountOptions = ["noatime" "compress=zstd"];
                 };
                 "@logs" = {
-                  mountpoint = "/mnt/storage/logs";
+                  mountpoint = "/logs";
                   mountOptions = ["noatime"];
                 };
 
                 "@containers" = {
-
-                  mountpoint = "/mnt/storage/containers";
+                  mountpoint = "/containers";
                   mountOptions = ["noatime" "compress=zstd"];
                 };
 
                 "@snapshots" = {
-
-                  mountpoint = "/mnt/storage/snapshots";
+                  mountpoint = "/snapshots";
                   mountOptions = ["noatime" "compress=zstd"];
                 };
 
@@ -90,25 +95,6 @@
           };
         };
       };
-
     };
-
-    # 🔵 Second HDD, part of the RAID setup
-    disk.hdd2 = {
-
-      device = "/dev/sdc";  # Second HDD
-      type = "disk";
-      content = {
-
-        type = "gpt";
-        partitions = {
-          primary = {
-            size = "100%";
-            content = "sameAs" "disk.hdd1";  # Uses the same RAID 0 setup
-          };
-        };
-      };
-    };
-
   };
 }

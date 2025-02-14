@@ -11,8 +11,7 @@
 
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    ./disk-config.nix
-
+    ./disko-config.nix
     ../common/nginx.nix
     ./services
     ./hardware-configuration.nix
@@ -23,7 +22,6 @@
       outputs.overlays.additions
       outputs.overlays.modifications
       outputs.overlays.unstable-packages
-
     ];
 
     config = {
@@ -53,7 +51,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostId = "f5c9addc";
   networking.hostName = "cerebro";
   networking.firewall.allowedTCPPorts = [
     22

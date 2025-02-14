@@ -2,7 +2,7 @@
   disko.devices = {
     # 🟢 SSD for NixOS System
     disk.ssd = {
-      device = "/dev/sda"; # Adjust based on your actual SSD
+      device = "/dev/sdb"; # Adjust based on your actual SSD
       type = "disk";
 
       content = {
@@ -48,7 +48,7 @@
 
     # 🔵 RAID 0 (Striping) or RAID 1 (Mirroring) for HDDs
     disk.hdd = {
-      device = "/dev/sdb";  # First HDD
+      device = "/dev/sda";  # First HDD
       type = "disk";
       content = {
         type = "gpt";

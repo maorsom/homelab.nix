@@ -51,7 +51,7 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             disko.nixosModules.disko
-            ./hosts/cerbero
+            ./hosts/cerebro
           ];
         };
       };

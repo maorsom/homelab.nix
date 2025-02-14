@@ -61,8 +61,9 @@
   ];
 
   users.users = {
-    marosom = {
+    maorsom = {
       isNormalUser = true;
+      initialPassword = "Oran1Ofir2!";
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILyvt3eutNJYckqboCsGejfpMvjJSVLjBvx7S71LBhBe"
       ];

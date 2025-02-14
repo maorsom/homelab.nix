@@ -19,9 +19,10 @@
           root = {
             size = "100%";
             content = {
-              type = "filesystem";
-              format = "ext4";
+              type = "btrfs";
+              extraArgs = [ "-f"];
               mountpoint = "/";
+              mountOptions = ["compress=zstd" "noatime"];
             };
           };
         };
@@ -35,11 +36,11 @@
       content = {
         type = "gpt";
         partitions = {
-          "zfs" = {
+          "primary" = {
             size = "100%";
             content = {
-              type = "zfs";
-              pool = "zroot";
+              type = "brtfs";
+              mountpoint = "/mnt/storage";
             };
           };
         };
@@ -53,39 +54,48 @@
       content = {
         type = "gpt";
         partitions = {
-          "zfs" = {
+          "primary" = {
             size = "100%";
             content = {
-              type = "zfs";
-              pool = "zroot";
+              type = "brtfs";
+              mountpoint = "/mnt/storage";
             };
           };
         };
       };
     };
 
-    # 🔥 ZFS Pool Configuration (RAID-1 Mirror)
-    zpool.zroot = {
-      type = "zpool";
-
-      mode = "mirror"; # RAID-1 for redundancy
-      options.cachefile = "none";
-      rootFsOptions = {
-        compression = "lz4";
-        "com.sun:auto-snapshot" = "true";
-      };
-      datasets = {
-        services = {
-          type = "zfs_fs";
-          mountpoint = "/services"; # Store application data
-        };
-        databases = {
-          type = "zfs_fs";
-          mountpoint = "/databases"; # Store PostgreSQL, MongoDB
-        };
-        logs = {
-          type = "zfs_fs";
-          mountpoint = "/logs"; # Store logs for Loki, Prometheus
+    raid.storage = {
+      type = "brtfs-raid";
+      level = "raid0";
+      devices = ["/dev/sdb" "/dev/sdc"];
+      content = {
+        type = "brtfs";
+        subvolumes = {
+          "@data" = {
+            mountpoint = "/mnt/storage/data";
+            mountOptions = ["noatime" "compress=zstd"];
+          };
+          "@databases" = {
+            mountpoint = "/mnt/storage/databases";
+            mountOptions = ["noatime" "compress=lzo" "nodatacow"];
+          };
+          "@backups" = {
+            mountpoint = "/mnt/storage/backups";
+            mountOptions = ["noatime" "compress=zstd"];
+          };
+          "@logs" = {
+            mountpoint = "/mnt/storage/logs";
+            mountOptions = ["noatime"];
+          };
+          "@containers" = {
+            mountpoint = "/mnt/storage/containers";
+            mountOptions = ["noatime" "compress=zstd"];
+          };
+          "@snapshots" = {
+            mountpoint = "/mnt/storage/snapshots";
+            mountOptions = ["noatime" "compress=zstd"];
+          };
         };
       };
     };

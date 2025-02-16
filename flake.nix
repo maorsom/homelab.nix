@@ -15,6 +15,11 @@
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -23,6 +28,7 @@
       nixpkgs,
       home-manager,
       disko,
+      deploy-rs,
       ...
     }@inputs:
     let
@@ -55,6 +61,20 @@
           ];
         };
       };
+
+      deploy.nodes.cerebro = {
+        hostname = "10.0.0.103";
+        fastConnection = true;
+        profiles = {
+          system = {
+            sshUser = "sysadmin";
+            user = "sysadmin";
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.cerebro;
+          };
+        };
+      };
+
+      check = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
 
       # homeConfigurations = {
       #   # FIXME replace with your username@hostname

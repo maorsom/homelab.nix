@@ -3,13 +3,12 @@
     enable = true;
     domain = "grafana.somech.local";
     port = 2342;
-    addr = "127.0.0.1";
+    addr = "0.0.0.0";
   };
 
-  services.nginx.virtualHosts.${config.services.grafana.domain} = {
-    default = true;
-    locations."/" = {
-      proxyPass = "https://127.0.0.1:${toString config.services.grafana.port}";
-    };
+  services.caddy.virtualHosts.${config.services.grafana.domain} = {
+    extraConfig = ''
+      reverse_proxy http://localhost:2342
+    '';
   };
 }

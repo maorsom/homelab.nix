@@ -1,10 +1,8 @@
 {config,lib,...}:{
-  services.nginx = {
+  services.caddy = {
     enable = true;
-      recommendedTlsSettings = true;
-      recommendedProxySettings = true;
-      recommendedGzipSettings = true;
-      recommendedOptimisation = true;
-      clientMaxBodySize = "300m";
+    virtualHosts."somech.local".extraConfig = ''
+      respond "OK"
+    '';
     };
 }

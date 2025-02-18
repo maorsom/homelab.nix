@@ -11,6 +11,7 @@
 
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+    ../common/global
     ./disko-config.nix
     ../common/nginx.nix
     ./services
@@ -46,6 +47,7 @@
       # Opinionated: make flake registry and nix path match flake inputs
       registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
       nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+      trustedUsers = ["@wheel"];
     };
 
   boot.loader.systemd-boot.enable = true;
@@ -54,19 +56,21 @@
   networking.hostName = "cerebro";
   networking.firewall.allowedTCPPorts = [
     22
+    80
+    443
     2342
   ];
 
   users.users = {
-    maorsom = {
+    sysadmin = {
       isNormalUser = true;
-      initialPassword = "Oran1Ofir2!";
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILyvt3eutNJYckqboCsGejfpMvjJSVLjBvx7S71LBhBe"
       ];
       extraGroups = [ "wheel" ];
     };
   };
+  security.sudo.wheelNeedsPassword = false;
 
   services.openssh = {
     enable = true;

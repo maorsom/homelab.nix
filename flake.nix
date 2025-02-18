@@ -16,6 +16,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -29,6 +34,7 @@
       home-manager,
       disko,
       deploy-rs,
+      sops-nix,
       ...
     }@inputs:
     let
@@ -56,7 +62,6 @@
         cerebro = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            disko.nixosModules.disko
             ./hosts/cerebro
           ];
         };
@@ -64,11 +69,12 @@
 
       deploy.nodes.cerebro = {
         hostname = "10.0.0.103";
-        fastConnection = true;
+        fastConnection = false;
+        remoteBuild = true;
         profiles = {
           system = {
             sshUser = "sysadmin";
-            user = "sysadmin";
+            user = "root";
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.cerebro;
           };
         };

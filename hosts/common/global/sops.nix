@@ -7,6 +7,6 @@ in {
   imports = [inputs.sops-nix.nixosModules.sops];
 
   sops = {
-    age.keyFile = "~/.config/sops/age/keys.txt";
+    age.keyFile = "/home/sysadmin/sops/age/keys.txt";
   };
 }

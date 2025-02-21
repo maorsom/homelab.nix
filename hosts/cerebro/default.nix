@@ -58,10 +58,10 @@
     22
     80
     443
-    2342
   ];
 
-  users.users = {
+
+  users.users = { 
     sysadmin = {
       isNormalUser = true;
       openssh.authorizedKeys.keys = [

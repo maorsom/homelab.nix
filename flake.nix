@@ -62,6 +62,7 @@
         cerebro = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
+            disko.nixosModules.disko
             ./hosts/cerebro
           ];
         };

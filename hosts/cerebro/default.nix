@@ -60,6 +60,19 @@
     443
   ];
 
+  networking = {
+    interfaces.eth0 = {
+      useDHCP = false;
+      ipv4.addresses = [{
+        address = "10.0.0.103";
+        prefixLength = 24;
+      }];
+    };
+    defaultGateway = "10.0.0.138";
+
+    # Set DNS Servers
+    nameservers = [ "8.8.8.8" "8.8.4.4" ];
+  };
 
   users.users = { 
     sysadmin = {

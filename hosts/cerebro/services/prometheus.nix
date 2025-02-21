@@ -1,9 +1,10 @@
-{config,pkgs,...}: {
-
+{config,pkgs,...}: 
+let
+  domain = "prometheus.somech.local";
+in {
   services.prometheus = {
     enable = true;
     port = 9090;  # Default port for Prometheus
-    domain = "prometheus.somech.local";
     scrapeConfigs = [
       {
         job_name = "node";
@@ -17,10 +18,10 @@
     ];
   };
 
-  services.caddy.virtualHosts.${config.services.grafana.domain} = {
+  services.caddy.virtualHosts.${domain} = {
     extraConfig = ''
       tls internal
-      reverse_proxy http://localhost:2342
+      reverse_proxy http://localhost:9090
     '';
   };
 }

@@ -1,20 +1,24 @@
-{config,pkgs,...}: 
+{config,lib,pkgs,...}: 
 let
   domain = "prometheus.somech.local";
 in {
+
+  services.prometheus.extraScrapeConfigs = lib.mkOption {
+    default = [];
+    type = lib.types.listOf lib.types.attrs;
+    description = "Extra scrape configurations for Prometheus.";
+  };
+
   services.prometheus = {
     enable = true;
     port = 9090;  # Default port for Prometheus
-    scrapeConfigs = [
+    scrateConfig = lib.mkMerge [
       {
-        job_name = "node";
-        scrape_interval = "15s";
-        static_configs = [
-          {
-            targets = [ "localhost:9100" ]; # Scrape Node Exporter
-          }
-        ];
+        job_name = "prometheus";
+        scrape_interval = "30s";
+        static_configs = [{ targets = [ "localhost:9090" ]; }];
       }
+      config.services.prometheus.extraScrapeConfigs
     ];
   };
 
@@ -24,4 +28,5 @@ in {
       reverse_proxy http://localhost:9090
     '';
   };
+
 }

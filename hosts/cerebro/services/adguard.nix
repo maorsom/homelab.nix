@@ -1,4 +1,4 @@
-{config,pkgs,...}: 
+{config,lib,pkgs,...}: 
 let
   domain = "ad.somech.lab";
 in {
@@ -6,8 +6,8 @@ in {
   services.adguardhome = {
     enable = true;
     openFirewall = false; 
+    host = "0.0.0.0";
     settings = {
-      bind_host = "0.0.0.0";
       dns = {
         bind_port = 53;  
         upstream_dns = [ "127.0.0.1:5335" ];
@@ -16,6 +16,9 @@ in {
         address = "0.0.0.0";
         port = 3000;
       };
+      querylog = {enabled = true;};
+      statistics = {enabled = true; interval = "1h";};
+      runtime = {prometheus = {enabled = true;};};
     };
   };
 
@@ -32,4 +35,13 @@ in {
       reverse_proxy http://localhost:3000
     '';
   };
+
+  services.prometheus.extraScrapeConfigs = lib.mkBefore [
+  {
+    job_name = "adguard";
+    scrape_interval = "15s";
+    static_configs = [
+      { targets = [ "localhost:3000" ]; }
+    ];
+  }];
 }

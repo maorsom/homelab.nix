@@ -7,6 +7,7 @@ in {
     enable = true;
     openFirewall = false; 
     host = "0.0.0.0";
+    mutableSettings = true;
     settings = {
       dns = {
         bind_port = 53;  
@@ -16,8 +17,6 @@ in {
         address = "0.0.0.0";
         port = 3000;
       };
-      querylog = {enabled = true;};
-      statistics = {enabled = true; interval = "1h";};
       runtime = {prometheus = {enabled = true;};};
     };
   };
@@ -35,13 +34,4 @@ in {
       reverse_proxy http://localhost:3000
     '';
   };
-
-  services.prometheus.extraScrapeConfigs = lib.mkBefore [
-  {
-    job_name = "adguard";
-    scrape_interval = "15s";
-    static_configs = [
-      { targets = [ "localhost:3000" ]; }
-    ];
-  }];
 }

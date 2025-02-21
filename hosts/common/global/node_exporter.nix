@@ -16,7 +16,8 @@ in {
     iptables -A INPUT -p tcp --dport 9100 -j DROP
   '';
 
-    services.prometheus.extraScrapeConfigs = lib.mkBefore [
+
+    services.prometheus.scrapeConfigs = lib.mkBefore [
     {
       job_name = "node_exporter";
       scrape_interval = "15s";

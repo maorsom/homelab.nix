@@ -1,16 +1,21 @@
 { config, lib, pkgs, ...}: {
-  services.mongodb = {
-    enable = true;
-    dataDir = "/databases/mongodb";
-    bind_ip = "0.0.0.0";
-    extraConfig = ''
-      security:
-        authorization: enabled
-    '';
+  
+  virtualisation.oci-containers = {
+    backend = "podman"; # Use Podman for containers
+    containers = {
+      mongodb = {
+        image = "docker.io/mongo:latest";
+        autoStart = true;
+        ports = [ "27017:27017" ];
+        environment = {
+          MONGO_INITDB_ROOT_USERNAME = "admin";
+          MONGO_INITDB_ROOT_PASSWORD = "secret";
+        };
+        volumes = [
+          "/databases/mongodb:/data/db" # Persistent storage
+        ];
+      };
+    };
   };
 
-  networking.firewall.extraCommands = ''
-      iptables -A INPUT -p tcp --dport 27017 -s 10.0.0.103/24 -j ACCEPT
-      iptables -A INPUT -p tcp --dport 27017 -j DROP
-  '';
 }

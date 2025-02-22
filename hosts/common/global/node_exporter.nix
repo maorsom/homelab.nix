@@ -6,9 +6,21 @@
 }: let
   prometheus_ip = "10.0.0.103";
 in {
-    services.prometheus.exporters.node = {
+  services.prometheus.exporters.node = {
     enable = true;
     port = 9100;
+    enabledCollectors = [ "systemd" ];
+    extraFlags = [ 
+      "--collector.ethtool"
+      "--collector.softirqs"
+      "--collector.tcpstat"
+      "--collector.processes"
+      "--collector.loadavg"
+      "--collector.meminfo"
+      "--collector.diskstats"
+      "--collector.filesystem"
+      "--collector.stat"
+    ];
   };
 
   networking.firewall.extraCommands = ''

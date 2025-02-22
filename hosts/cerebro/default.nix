@@ -14,6 +14,7 @@
     ../common/global
     ./disko-config.nix
     ../common/nginx.nix
+    ../common/virtualisation.nix
     ../common/monogodb.nix
     ./services
     ./hardware-configuration.nix
@@ -30,6 +31,10 @@
       allowUnfree = true;
     };
   };
+
+  environment.systemPackages = [
+    pkgs.mongodb-ce
+  ];
 
   nix =
     let

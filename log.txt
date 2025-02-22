@@ -1,0 +1,18 @@
+setting up /etc...
+× mongodb.service - MongoDB server
+     Loaded: loaded (/etc/systemd/system/mongodb.service; enabled; preset: ignored)
+     Active: failed (Result: exit-code) since Fri 2025-02-21 21:50:36 UTC; 287ms ago
+ Invocation: 63c5955f4f764c7b9f041f23a8014000
+    Process: 16851 ExecStartPre=/nix/store/ibi4ammq1brn30gllg3j51bvcrjc9p4g-unit-script-mongodb-pre-start/bin/mongodb-pre-start (code=exited, status=1/FAILURE)
+         IP: 0B in, 0B out
+         IO: 0B read, 0B written
+   Mem peak: 1.9M
+        CPU: 12ms
+
+Feb 21 21:50:36 cerebro systemd[1]: Starting MongoDB server...
+Feb 21 21:50:36 cerebro mongodb-pre-start[16852]: rm: cannot remove '/databases/mongodb/mongod.lock': No such file or directory
+Feb 21 21:50:36 cerebro systemd-run[16854]: Failed to start transient service unit: Unit mongodb-for-setup.service was already loaded or has a fragment file.
+Feb 21 21:50:36 cerebro systemd[1]: mongodb.service: Control process exited, code=exited, status=1/FAILURE
+Feb 21 21:50:36 cerebro systemd[1]: mongodb.service: Failed with result 'exit-code'.
+Feb 21 21:50:36 cerebro systemd[1]: Failed to start MongoDB server.
+setting up /etc...

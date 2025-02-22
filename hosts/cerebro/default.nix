@@ -14,8 +14,8 @@
     ../common/global
     ./disko-config.nix
     ../common/nginx.nix
-    ../common/virtualisation.nix
-    ../common/monogodb.nix
+    # ../common/virtualisation.nix
+    ./common/monogodb.nix
     ./services
     ./hardware-configuration.nix
   ];

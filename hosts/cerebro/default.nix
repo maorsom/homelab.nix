@@ -15,7 +15,7 @@
     ./disko-config.nix
     ../common/nginx.nix
     # ../common/virtualisation.nix
-    ./common/mongodb.nix
+    ../common/mongodb.nix
     ./services
     ./hardware-configuration.nix
   ];

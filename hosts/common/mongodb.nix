@@ -1,4 +1,5 @@
 { config, lib, pkgs, ...}: {
+  
   services.mongodb = {
     enable = true;
     package = pkgs.mongodb-ce;
@@ -7,11 +8,7 @@
     extraConfig = ''
       security:
         authorization: "enabled"
-
-      setParameter:
-        authenticationMechanisms: "SCRAM-SHA-256"
     '';
-    initialScript = ./initial_data.js;
   };
 
   networking.firewall.extraCommands = ''

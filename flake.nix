@@ -31,6 +31,7 @@
     {
       self,
       nixpkgs,
+      nixpkgs-unstable,
       home-manager,
       disko,
       deploy-rs,

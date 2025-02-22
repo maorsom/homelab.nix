@@ -32,10 +32,6 @@
     };
   };
 
-  environment.systemPackages = [
-    pkgs.mongodb-ce
-  ];
-
   nix =
     let
       flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;

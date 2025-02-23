@@ -4,7 +4,6 @@ let
 in {
 
   services.loki = {
-
     enable = true;
     configFile = ./loki-local-config.yaml;
   };
@@ -23,7 +22,7 @@ in {
   services.caddy.virtualHosts.${domain} = {
     extraConfig = ''
       tls internal
-      reverse_proxy http://localhost:9090
+      reverse_proxy http://localhost:3100
     '';
   };
 

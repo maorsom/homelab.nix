@@ -1,0 +1,9 @@
+loki.source.journal "systemd_journal" {
+  forward_to = [loki.write.loki_endpoint.receiver]
+}
+
+loki.write "loki_endpoint" {
+  endpoint {
+    url = "http://localhost:3100/loki/api/v1/push"
+  }
+}

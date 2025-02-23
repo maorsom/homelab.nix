@@ -3,16 +3,16 @@ let
   domain = "loki.somech.lab";
 in {
 
-    services.loki = {
-      enable = true;
-      configFile = ./loki-config.yaml;
-    };
+  services.loki = {
+    enable = true;
+    dataDir = "/data/loki";
+    configFile = ./loki-config.yaml;
+  };
 
   services.caddy.virtualHosts.${domain} = {
     extraConfig = ''
       tls internal
-      reverse_proxy http://localhost:3030
+      reverse_proxy http://localhost:3100
     '';
   };
-
 }

@@ -5,9 +5,10 @@ in {
 
   services.freshrss = {
     enable = true;
-    database.type = "sqlite";
-    listen.ip = "0.0.0.0";
-    listen.port = 8082;
+    authType = "none";
+    dataDir = "/data/rss";
+    baseUrl = "https://${domain}";
+    virtualHost = null;
   };
 
   networking.firewall.extraCommands = ''

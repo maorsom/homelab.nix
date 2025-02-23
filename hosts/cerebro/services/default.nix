@@ -2,10 +2,11 @@
   imports = [
     ./grafana.nix
     ./prometheus.nix
-    ./adguard.nix
-    #./loki.nix
+    ./loki.nix
+    ./promtail.nix
     ./paperless.nix
-    ./dashy.nix
-    ./freshrss.nix
+    ./adguard.nix
+    #./dashy.nix
+    #./freshrss.nix
   ];
 }

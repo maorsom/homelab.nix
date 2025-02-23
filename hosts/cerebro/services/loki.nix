@@ -3,26 +3,97 @@ let
   domain = "loki.somech.lab";
 in {
 
-  services.loki = {
-    enable = true;
-    configFile = ./loki-local-config.yaml;
-  };
+    services.loki = {
+      enable = true;
+      configuration = {
+        server.http_listen_port = 3030;
 
-  systemd.services.promtail = {
-    description = "Promtail service for Loki";
-    wantedBy = [ "multi-user.target" ];
+        auth_enabled = false;
 
-    serviceConfig = {
-      ExecStart = ''
-        ${pkgs.grafana-loki}/bin/promtail --config.file ${./promtail.yaml}
-      '';
+        ingester = {
+
+          lifecycler = {
+            address = "127.0.0.1";
+            ring = {
+              kvstore = {
+
+                store = "inmemory";
+              };
+
+              replication_factor = 1;
+            };
+          };
+          chunk_idle_period = "1h";
+          max_chunk_age = "1h";
+          chunk_target_size = 999999;
+          chunk_retain_period = "30s";
+          max_transfer_retries = 0;
+        };
+
+        schema_config = {
+          configs = [{
+            from = "2022-06-06";
+
+            store = "boltdb-shipper";
+
+            object_store = "filesystem";
+            schema = "v11";
+            index = {
+              prefix = "index_";
+              period = "24h";
+            };
+          }];
+        };
+
+        storage_config = {
+
+          boltdb_shipper = {
+            active_index_directory = "/logs/loki/boltdb-shipper-active";
+            cache_location = "/logs/loki/boltdb-shipper-cache";
+            cache_ttl = "24h";
+            shared_store = "filesystem";
+          };
+
+          filesystem = {
+            directory = "/logs/loki/chunks";
+
+          };
+        };
+
+        limits_config = {
+          reject_old_samples = true;
+
+          reject_old_samples_max_age = "168h";
+        };
+
+        chunk_store_config = {
+          max_look_back_period = "0s";
+        };
+
+        table_manager = {
+          retention_deletes_enabled = true;
+          retention_period = "168s";
+        };
+
+        compactor = {
+
+          working_directory = "/logs/loki";
+          shared_store = "filesystem";
+          compactor_ring = {
+            kvstore = {
+              store = "inmemory";
+            };
+
+          };
+        };
+      };
+      # user, group, dataDir, extraFlags, (configFile)
     };
-  };
 
   services.caddy.virtualHosts.${domain} = {
     extraConfig = ''
       tls internal
-      reverse_proxy http://localhost:3100
+      reverse_proxy http://localhost:3030
     '';
   };
 

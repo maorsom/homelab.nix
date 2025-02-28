@@ -5,3 +5,7 @@ creation_rules:
     key_groups:
     - age:
       - *primary
+  - path_regex: hosts/cerebro/services/step-ca/certs.yaml$
+    key_groups:
+    - age:
+      - *primary

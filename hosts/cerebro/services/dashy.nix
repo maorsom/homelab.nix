@@ -4,7 +4,7 @@ let
 in { 
   services.dashy = {
     enable = true;   
-    package = pkgs.dashy-ui;
+    package = pkgs.dashy;
   };
 
   services.caddy.virtualHosts.${domain} = {

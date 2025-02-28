@@ -62,6 +62,13 @@
     443
   ];
 
+  services.journald = {
+    extraConfig = ''
+      Storage=persistent
+      SplitMode=uid
+    '';
+  };
+
   networking = {
     interfaces.eth0 = {
       useDHCP = false;
@@ -82,7 +89,7 @@
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILyvt3eutNJYckqboCsGejfpMvjJSVLjBvx7S71LBhBe"
       ];
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "adm" "systemd-journal" ];
     };
   };
   security.sudo.wheelNeedsPassword = false;

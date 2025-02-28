@@ -6,4 +6,5 @@ in {
     enable = true;
     configPath = ./alloy-config.alloy;
   };
+
 }

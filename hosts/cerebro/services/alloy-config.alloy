@@ -1,8 +1,45 @@
-loki.source.journal "systemd_journal" {
+loki.relabel "journal" {
+  forward_to = []
+
+  rule {
+    source_labels = ["__journal__systemd_unit"]
+    target_label  = "unit"
+  }
+}
+
+loki.source.journal "journal" {
   forward_to = [loki.write.loki_endpoint.receiver]
+  relabel_rules = loki.relabel.journal.rules
+  labels = {component = "loki.source.journal"}
 }
 
 loki.write "loki_endpoint" {
+  endpoint {
+    url = "http://localhost:3100/loki/api/v1/push"
+  }
+}
+
+prometheus.exporter.self "default" {
+}
+
+prometheus.scrape "metamonitoring" {
+  targets    = prometheus.exporter.self.default.targets
+  forward_to = [prometheus.remote_write.default.receiver]
+}
+
+prometheus.remote_write "default" {
+  endpoint {
+    url = "http://localhost:9090/api/v1/push"
+  }
+}
+
+logging {
+  level    = "info"
+  format   = "json"
+  write_to = [loki.write.default.receiver]
+}
+
+loki.write "default" {
   endpoint {
     url = "http://localhost:3100/loki/api/v1/push"
   }

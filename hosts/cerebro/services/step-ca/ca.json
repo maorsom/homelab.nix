@@ -1,0 +1,63 @@
+{
+	"root": "/home/maorsom/.step/certs/root_ca.crt",
+	"federatedRoots": null,
+	"crt": "/home/maorsom/.step/certs/intermediate_ca.crt",
+	"key": "/home/maorsom/.step/secrets/intermediate_ca_key",
+	"address": "0.0.0.0:4443",
+	"insecureAddress": "",
+	"dnsNames": [
+		"ca.somech.lab"
+	],
+	"logger": {
+		"format": "text"
+	},
+	"db": {
+		"type": "badgerv2",
+		"dataSource": "/home/maorsom/.step/db",
+		"badgerFileLoadingMode": ""
+	},
+	"authority": {
+		"provisioners": [
+			{
+				"type": "JWK",
+				"name": "maor@wesoemch.com",
+				"key": {
+					"use": "sig",
+					"kty": "EC",
+					"kid": "B4VcEwPUi8xDV059wGIy9jF71RnGfnMbDsACCTq9dec",
+					"crv": "P-256",
+					"alg": "ES256",
+					"x": "PxDJt50G7fc4febZLrApAr5djMCRmxb5eoNPdOxhLcE",
+					"y": "Mz2H-wzI8bssQTDfSo5LutaH2fZRldltgGTYHLpL9aQ"
+				},
+				"encryptedKey": "eyJhbGciOiJQQkVTMi1IUzI1NitBMTI4S1ciLCJjdHkiOiJqd2sranNvbiIsImVuYyI6IkEyNTZHQ00iLCJwMmMiOjYwMDAwMCwicDJzIjoia3BQdDR0cVZNM1FUcEt3VzNWNHdXQSJ9.MWdtlp1KoHBJU5xCpFLaitkXsOJdVi-1Wm0ldjyy_5eLmY6L9dcrpQ.xUfYx7RJ0Ll-TBzx.zXFW0AiBslRJxXI0H1z6w5zWo45nVkfI9z7KAiZ4tcCThONnPAKhd2cxrCekpx80nPeZVb4OEN-0YF4L34YlW4ujwXseJeogd-B3Q-1jGVdck4ddizTLEh7hqdzKEc2VPVSpFqiJVwJndM6RUGQLYmI0OtjRJjUcGcAPAKN-DGWl2C60lA1VFW0tmsLYYdFTpitVNjJ-IgZYf5IuVOITDKHSfH5iLNtyXn1vhNhqYkzOJNGTQqeRYo5G1SzsHVMfCVBMHC5JHs0S1DuMrZS40A9zJT_hKRRpv_Bi6rWLZ25PyAnuaL1Qxaxhh_2JXSDa43YFo-lb4WD-X4gZvEM.J09uZ1oVvSzsSusyONCdrw"
+			},
+			{
+				"type": "ACME",
+				"name": "acme",
+				"claims": {
+					"enableSSHCA": true,
+					"disableRenewal": false,
+					"allowRenewalAfterExpiry": false,
+					"disableSmallstepExtensions": false
+				},
+				"options": {
+					"x509": {},
+					"ssh": {}
+				}
+			}
+		],
+		"template": {},
+		"backdate": "1m0s"
+	},
+	"tls": {
+		"cipherSuites": [
+			"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
+			"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256"
+		],
+		"minVersion": 1.2,
+		"maxVersion": 1.3,
+		"renegotiation": false
+	},
+	"commonName": "Step Online CA"
+}

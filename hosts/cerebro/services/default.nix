@@ -6,8 +6,8 @@
     ./alloy.nix
     ./paperless.nix
     ./adguard.nix
-    ./dashy.nix
-    ./freshrss.nix
+    #./dashy.nix
+    #./freshrss.nix
     ./step-ca
   ];
 }

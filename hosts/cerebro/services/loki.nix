@@ -11,7 +11,6 @@ in {
 
   services.caddy.virtualHosts.${domain} = {
     extraConfig = ''
-      tls internal
       reverse_proxy http://localhost:3100
     '';
   };

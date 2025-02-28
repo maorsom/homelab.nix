@@ -4,54 +4,30 @@ let
 in {
 
   sops.secrets.intermediate_password = {
-    sopsFile = "./certs.yaml";
+    sopsFile = ./certs.yaml;
+    path = "/var/lib/step-ca/step-ca-password.txt";
     owner = "step-ca";
-    mode = "0600";
-  };
-
-  environment.var.lib."step/secrets/intermediate_password" = {
-    text = config.sops.secrets.intermediate_password.path;
-    owner = "step-ca";
-    group = "step-ca";
     mode = "0600";
   };
 
   sops.secrets.intermediate_crt = {
-    sopsFile = "./certs.yaml";
+    sopsFile = ./certs.yaml;
+    path = "/var/lib/step-ca/certs/intermediate_ca.crt";
     owner = "step-ca";
-    mode = "0640";
-  };
-
-  environment.var.lib."step/secrets/intermediate_ca" = {
-    text = config.sops.secrets.intermediate_crt.path;
-    owner = "step-ca";
-    group = "step-ca";
     mode = "0640";
   };
 
   sops.secrets.intermediate_key = {
-    sopsFile = "./certs.yaml";
+    sopsFile = ./certs.yaml;
+    path = "/var/lib/step-ca/secrets/intermediate_ca_key";
     owner = "step-ca";
-    mode = "0600";
-  };
-
-  environment.var.lib."step/secrets/intermediate_ca_key" = {
-    text = config.sops.secrets.intermediate_key.path;
-    owner = "step-ca";
-    group = "step-ca";
     mode = "0600";
   };
 
   sops.secrets.root_crt = {
-    sopsFile = "./certs.yaml";
+    sopsFile = ./certs.yaml;
+    path = "/var/lib/step-ca/certs/root_ca.crt";
     owner = "step-ca";
-    mode = "0640";
-  };
-
-  environment.var.lib."step/secrets/root_ca" = {
-    text = config.sops.secrets.root_crt.path;
-    owner = "step-ca";
-    group = "step-ca";
     mode = "0640";
   };
 
@@ -61,7 +37,7 @@ in {
     address = "0.0.0.0";
     openFirewall = true;
     settings = builtins.fromJSON (builtins.readFile ./ca.json);
-    intermediatePasswordFile = config.sops.secrets.ca.intermediate_password.path;
+    intermediatePasswordFile = config.sops.secrets.intermediate_password.path;
   };
 
   networking.firewall.extraCommands = ''

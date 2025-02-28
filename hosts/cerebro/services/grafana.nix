@@ -8,7 +8,6 @@
 
   services.caddy.virtualHosts.${config.services.grafana.domain} = {
     extraConfig = ''
-      tls internal
       reverse_proxy http://localhost:2342
     '';
   };

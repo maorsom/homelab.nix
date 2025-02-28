@@ -1,8 +1,8 @@
 {
-	"root": "/home/maorsom/.step/certs/root_ca.crt",
+	"root": "/var/lib/step-ca/certs/root_ca.crt",
 	"federatedRoots": null,
-	"crt": "/home/maorsom/.step/certs/intermediate_ca.crt",
-	"key": "/home/maorsom/.step/secrets/intermediate_ca_key",
+	"crt": "/var/lib/step-ca/certs/intermediate_ca.crt",
+	"key": "/var/lib/step-ca/secrets/intermediate_ca_key",
 	"address": "0.0.0.0:4443",
 	"insecureAddress": "",
 	"dnsNames": [
@@ -13,7 +13,7 @@
 	},
 	"db": {
 		"type": "badgerv2",
-		"dataSource": "/home/maorsom/.step/db",
+		"dataSource": "/var/lib/step-ca/db",
 		"badgerFileLoadingMode": ""
 	},
 	"authority": {
@@ -59,5 +59,5 @@
 		"maxVersion": 1.3,
 		"renegotiation": false
 	},
-	"commonName": "Step Online CA"
+	"commonName": "Somech Lab CA"
 }

@@ -2,6 +2,11 @@
   services.caddy = {
     enable = true;
     globalConfig = ''
+      {
+        email maor@wesomech.com
+        acme_ca https://ca.somech.lab/acme/acme/directory
+        acme_ca_root /var/lib/step-ca/certs/root_ca.crt
+      }
       servers {
           metrics
       }

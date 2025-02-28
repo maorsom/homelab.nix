@@ -13,8 +13,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     ../common/global
     ./disko-config.nix
-    ../common/nginx.nix
-    # ../common/virtualisation.nix
+    ../common/caddy.nix
     ../common/mongodb.nix
     ./services
     ./hardware-configuration.nix

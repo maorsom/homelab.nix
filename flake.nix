@@ -64,6 +64,7 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             disko.nixosModules.disko
+            self.nixosModules.tls-cert-manager
             ./hosts/cerebro
           ];
         };

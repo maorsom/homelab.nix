@@ -1,7 +1,7 @@
 {config,pkgs,...}: {
   services.grafana = {
     enable = true;
-    domain = "grafana.somech.local";
+    domain = "grafana.somech.lab";
     port = 2342;
     addr = "0.0.0.0";
   };

@@ -1,6 +1,6 @@
 {config,lib,pkgs,...}: 
 let
-  domain = "prometheus.somech.local";
+  domain = "prometheus.somech.lab";
 in {
 
   services.prometheus = {

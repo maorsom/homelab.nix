@@ -55,6 +55,12 @@
   # programs.neovim.enable = true;
   # home.packages = with pkgs; [ steam ];
 
+
+  environment.systemPackages = with pkgs;[
+    openssl
+    ca-certificates
+  ];
+
   # Enable home-manager and git
   programs.home-manager.enable = true;
   programs.git.enable = true;

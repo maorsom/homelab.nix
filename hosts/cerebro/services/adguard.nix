@@ -11,7 +11,7 @@ in {
     settings = {
       dns = {
         bind_port = 53;  
-        upstream_dns = [ "127.0.0.1:5353" "8.8.8.8" ];
+        upstream_dns = [ "127.0.0.1:5335" ];
       };
       http = {
         address = "0.0.0.0";

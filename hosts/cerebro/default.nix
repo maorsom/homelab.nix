@@ -79,7 +79,7 @@
     defaultGateway = "10.0.0.138";
 
     # Set DNS Servers
-    nameservers = [ "8.8.8.8" "8.8.4.4" ];
+    nameservers = [ "10.0.0.103" ];
   };
 
   users.users = { 

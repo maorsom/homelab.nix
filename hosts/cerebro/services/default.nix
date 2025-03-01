@@ -9,5 +9,6 @@
     #./dashy.nix
     #./freshrss.nix
     ./step-ca
+    ./unbound.nix
   ];
 }

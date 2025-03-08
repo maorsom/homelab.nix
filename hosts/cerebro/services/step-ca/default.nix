@@ -31,14 +31,14 @@ in {
     mode = "0640";
   };
 
-  environment.etc."step-ca/certs/root_ca.crt" = {
+  environment.etc."ssl/certs/root_ca.crt" = {
     source = config.sops.secrets.root_crt.path;
     user = "root";
     group = "root";
     mode = "0644";
   };
 
-  security.pki.certificates = [ "/etc/step-ca/certs/root_ca.crt" ];
+  security.pki.certificates = [ "/etc/ssl/certs/root_ca.crt" ];
 
   services.step-ca = {
     enable = true;
@@ -49,8 +49,7 @@ in {
     intermediatePasswordFile = config.sops.secrets.intermediate_password.path;
   };
 
-  # networking.firewall.extraCommands = ''
-  #   iptables -A INPUT -p tcp --dport 4443 -s 10.0.0.0/24 -j ACCEPT
-  #   iptables -A INPUT -p tcp --dport 4443 -j DROP
-  # '';
+  services.tls-cert-manager = {
+    enable = true;
+  };
 }

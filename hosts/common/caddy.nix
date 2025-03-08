@@ -7,11 +7,13 @@
       acme_ca https://ca.somech.lab:4443/acme/acme/directory
       acme_ca_root /etc/step-ca/certs/root_ca.crt
 
+      auto_https disable_redirects
       servers {
           metrics
       }
     '';
   };
+
 
   services.prometheus.scrapeConfigs = lib.mkBefore [
     {

@@ -1,10 +1,12 @@
 { config, lib, pkgs, ...}: {
 
-  services.tls-cert-manager = {
-    enable = true;
-    domain = "mongo.somech.lab";
-    renewCommand = "systemctl reload postgresql";
-  };
+  # services.tls-cert-manager = {
+  #   enable = true;
+  #   domain = "mongo.somech.lab";
+  #   renewCommand = "systemctl reload postgresql";
+  #   user = "mongodb";
+  #   group = "mongodb";
+  # };
   
   services.mongodb = {
     enable = true;

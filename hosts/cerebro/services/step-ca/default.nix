@@ -1,6 +1,8 @@
 { config, lib, pkgs, ...} :
 let
   domain = "ca.somech.lab";
+  acmeHome = "/var/lib/acme";  # Centralized storage for acme.sh
+  acmeBin = "${pkgs.acme-sh}/bin/acme.sh";  # Use the NixOS-installed acme.sh
 in {
 
   sops.secrets.intermediate_password = {
@@ -49,7 +51,9 @@ in {
     intermediatePasswordFile = config.sops.secrets.intermediate_password.path;
   };
 
-  services.tls-cert-manager = {
-    enable = true;
-  };
+  services.cron.enable = true;
+  services.cron.systemCronJobs = [
+    "*/1 * * * * ${config.services.acme-sh.user} ${acmeBin} --cron --home ${acmeHome}"
+  ];
+
 }
